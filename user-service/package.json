@@ -12,6 +12,10 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "express": "^5.2.1"
+    "cors": "^2.8.6",
+    "dotenv": "^17.2.4",
+    "express": "^5.2.1",
+    "express-oauth2-jwt-bearer": "^1.7.4",
+    "mongoose": "^9.1.6"
   }
 }
