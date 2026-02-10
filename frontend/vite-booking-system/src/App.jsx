@@ -5,6 +5,7 @@ import './App.css'
 
 import LoginButton from './components/LoginButton';
 import LogoutButton from './components/LogoutButton';
+import Profile from './components/Profile';
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
         <h1>Auth0 Login</h1>
         <LoginButton />
         <LogoutButton />
+        <Profile />
       </div>
       <h1>Vite + React</h1>
       <div className="card">
