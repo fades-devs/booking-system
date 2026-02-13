@@ -11,7 +11,7 @@ const roomSchema = new Schema ({
         required: true
     },
     basePrice: {
-        type: Double,
+        type: Number,
         required: true
     },
     location: {
