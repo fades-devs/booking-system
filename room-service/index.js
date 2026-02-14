@@ -85,7 +85,19 @@ app.get('/api/v1/rooms', async (req, res) => {
     }
 });
 
-// route to update specific room
+// route to get all rooms by partner
+app.get('/api/v1/rooms/by-partner', checkJwt, async (req, res) => {
+    try {
+        const partnerId = req.auth.payload.sub;
+        const rooms = await Room.find({partnerId});
+        res.status(200).json(rooms);
+    } catch (error) {
+        console.error("Error fetching rooms for partner:", error);
+        res.status(500).json({ error: 'Internal Server Error'});
+    }
+});
+
+// route to update specific room (for partner)
 app.put('/api/v1/rooms/:id', async (req, res) => {
     try {
         const id = req.params.id;
