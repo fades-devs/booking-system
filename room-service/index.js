@@ -98,32 +98,36 @@ app.get('/api/v1/rooms/by-partner', checkJwt, async (req, res) => {
 });
 
 // route to update specific room (for partner)
-app.put('/api/v1/rooms/:id', async (req, res) => {
+app.put('/api/v1/rooms/:id', checkJwt, async (req, res) => {
     try {
+        
+        const partnerId = req.auth.payload.sub;
         const id = req.params.id;
-        const roomExist = await Room.findOne({_id: id});
+        const roomExist = await Room.findOne({_id: id, partnerId});
 
         if (!roomExist) {
-            return res.status(404).json({message: "Room Not Found."})
+            return res.status(404).json({message: "Room Not Found or Unauthorized User."})
         }
 
         const updatedRoom = await Room.findByIdAndUpdate(id, req.body, {new: true});
         res.status(201).json(updatedRoom);
 
     } catch (error) {
-        console.error("Error fetching rooms:", error);
+        console.error("Error updating room:", error);
         res.status(500).json({ error: 'Internal Server Error'});
     }
 });
 
 // route to delete specific room
-app.delete('/api/v1/rooms/:id', async (req, res) => {
+app.delete('/api/v1/rooms/:id', checkJwt, async (req, res) => {
     try {
+
+        const partnerId = req.auth.payload.sub;
         const id = req.params.id;
-        const roomExist = await Room.findOne({_id: id});
+        const roomExist = await Room.findOne({_id: id, partnerId});
 
         if (!roomExist) {
-            return res.status(404).json({message: "Room Not Found."})
+            return res.status(404).json({message: "Room Not Found or Unauthorized User."})
         }
 
         await Room.findByIdAndDelete(id);
