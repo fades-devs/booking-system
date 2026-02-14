@@ -2,6 +2,8 @@ const express = require('express');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 
+const { auth } = require('express-oauth2-jwt-bearer');
+
 const Room = require('./Room');
 
 const app = express();
@@ -21,6 +23,12 @@ mongoose.connect(process.env.MONGO_URI)
     process.exit(1); // stop app if db fails
 });
 
+// user authentication
+const checkJwt = auth({
+  audience: process.env.AUTH0_AUDIENCE,
+  issuerBaseURL: process.env.AUTH0_ISSUER_BASE_URL,
+  tokenSigningAlg: 'RS256'
+});
 
 // routes
 app.get('/api/fetch', (req, res) => {
@@ -32,22 +40,30 @@ app.get('/api/fetch', (req, res) => {
 });
 
 // route to create new room
-app.post('/api/v1/room', async (req, res) => {
+app.post('/api/v1/room', checkJwt, async (req, res) => {
     try {
 
-        // Create new object from request body
-        const roomData = new Room(req.body);
-        // Extract title from object
-        const {title} = roomData;
+        // get ID of authenticated user
+        const partnerId = req.auth.payload.sub;
 
-        // Check if room already exists
-        const roomExist = await Room.findOne({title});
+        const roomData = new Room({
+            title: req.body.title,
+            capacity: req.body.capacity,
+            basePrice: req.body.basePrice,
+            location: req.body.location,
+            pictures: [], // empty for now
+            partnerId
+        });
+
+        // check if room already exists
+        const {title} = roomData;
+        const roomExist = await Room.findOne({title, partnerId});
         if (roomExist) {
-             return res.status(400).json({message: 'Room already exists.'})
+            return res.status(400).json({message: "Room already exists or unauthorized user."})
         }
 
-        // Save in DB
-        await roomData.save();
+        // if not, save in DB (for partner)
+        await roomData.save()
         res.status(201).json(roomData);
 
     } catch (error) {
