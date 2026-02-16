@@ -72,11 +72,69 @@ app.post('/api/v1/room', checkJwt, async (req, res) => {
     }
 });
 
-// route to get all rooms
+// // route to get all rooms
+// app.get('/api/v1/rooms', async (req, res) => {
+
+//     try {
+//         const rooms = await Room.find();
+//         res.status(200).json(rooms);
+
+//     } catch (error) {
+//         console.error("Error fetching rooms:", error);
+//         res.status(500).json({ error: 'Internal Server Error'});
+//     }
+// });
+
+// route to get all rooms (search/filter logic)
 app.get('/api/v1/rooms', async (req, res) => {
 
     try {
-        const rooms = await Room.find();
+
+        // Extract parameters from request query
+        const title = req.query.title
+        const location = req.query.location
+        const capacity = req.query.capacity
+        const price = req.query.price
+
+        // Dynamic query based on parameters
+        const query = {}
+
+        // Search for specific title
+        if (title) {
+            query.title = {$regex: title, $options: 'i'}
+        }
+
+        // Search for specific location
+        if (location) {
+            query.location = {$regex: location, $options: 'i'}
+        }
+
+        // Filter by capacity
+        if (capacity) {
+            query.capacity = capacity
+        }
+
+        // Filter by price
+        if (price) {
+            query.basePrice = price
+        }
+
+        // Perform final query
+        const rooms = await Room.find(query)
+
+        // // if (!search) {
+        // //     const rooms = await Room.find();
+        // //     return res.status(200).json(rooms);
+        // // }
+
+        // // const rooms = await Room.find({title: search});
+        // const rooms = await Room.find({
+        //     $text: {$search: search},
+        //     location: location
+        // });
+        // const rooms = await Room.find({$text: {$search: search}}, {location: location},
+        //     {capacity: {$gte: capMin, $lte: capMax}}, {basePrice: {$gte: priceMin, $lte: priceMax}});
+        
         res.status(200).json(rooms);
 
     } catch (error) {
