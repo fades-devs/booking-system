@@ -4,15 +4,31 @@ const mongoose = require('mongoose');
 
 const { auth } = require('express-oauth2-jwt-bearer');
 
+
 const Room = require('./Room');
 
 const app = express();
+
+// const s3 = new S3Client({
+//     credentials: {
+//         accessKeyId: process.env.AWS_ACCESS_KEY,
+//         secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+//     },
+//     region: 'eu-west-1'
+// });
 
 app.use(express.json());
 
 // load environment variables
 dotenv.config();
+const upload = require('./upload');
+
 const port = process.env.PORT || 3001; 
+
+// const bucketName = process.env.AWS_BUCKET_NAME
+// const region = process.env.AWS_BUCKET_REGION
+// const accessKeyId = process.env.AWS_ACCESS_KEY
+// const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY
 
 
 // connect to database
@@ -36,6 +52,16 @@ app.get('/api/fetch', (req, res) => {
         res.json('Yes it works!')
     } catch (error) {
         res.status(500).json({ error: 'Internal Server Error'})
+    }
+});
+
+// route to test file upload
+app.post('/api/upload', upload.array('files', 3), async (req, res) => {
+    try {
+        res.status(201).json({files: req.files})
+
+    } catch(error) {
+        res.status(500).json(error);
     }
 });
 
