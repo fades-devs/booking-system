@@ -73,15 +73,19 @@ app.post('/api/v1/booking', checkJwt, async (req, res) => {
             return res.status(400).json({message: 'This room is already booked.'});
         }
 
-        // test for now
-        const finalPrice = 10;
-        const basePrice = 5;
-        const weatherFee = 5;
+        // extract price data and calculate final price
+        const basePrice = room.basePrice;
+
+        const weatherCharge = await axios.get(`http://localhost:3003/api/weather?location=${room.location}`);
+
+        const charge = weatherCharge.data.charge;
+
+        const finalPrice = basePrice * (1 + charge);
 
         const bookingData = new Booking({
             finalPrice,
             basePrice,
-            weatherFee,
+            weatherCharge,
             clientId: userId,
             roomId,
             roomName: room.title
