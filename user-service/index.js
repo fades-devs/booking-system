@@ -87,9 +87,15 @@ app.post('/api/v1/auth/sync', checkJwt, async (req, res) => {
     }
 });
 
+// route to get specific user (for other services)
+app.get('/api/v1/user/:authid', async(req, res) => {
+    const user = await User.findOne({auth0Id: req.params.authid});
+    res.status(200).json(user);
+});
+
 // routes
 app.get('/', (req, res) => {
-    res.send('Hello World!')
+    res.send('Hello World!');
 });
 
 // start server
