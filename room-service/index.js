@@ -215,6 +215,25 @@ app.get('/api/v1/rooms/by-partner', checkJwt, async (req, res) => {
     }
 });
 
+// route to get specific room by ID (during booking)
+app.get('/api/v1/rooms/:id', async(req, res) => {
+    try {
+        id = req.params.id;
+        const roomData = await Room.findOne({_id: id});
+
+        if (!roomData) {
+            return res.status(404).json({message: "Room Not Found."})
+        }
+
+        res.status(200).json(roomData);
+
+    } catch(error) {
+        console.error("Error fetching room:", error);
+        res.status(500).json({ error: 'Internal Server Error'});
+    }
+});
+
+
 // route to update specific room (for partner)
 app.put('/api/v1/rooms/:id', checkJwt, async (req, res) => {
     try {
