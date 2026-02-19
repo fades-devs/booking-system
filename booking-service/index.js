@@ -106,20 +106,48 @@ app.post('/api/v1/booking', checkJwt, async (req, res) => {
 
         const finalPrice = basePrice * (1 + charge);
 
+        // stripe session for checkout
+        const session = await stripe.checkout.sessions.create({
+            // add try catch block later naybe
+            payment_method_types: ['card'],
+            line_items: [
+            {
+                price_data: {
+                    currency: 'GBP',
+                    product_data: {
+                        name: `${room.title} - Booking`,
+                        description: `Location: ${room.location} - Weather Charge: ${charge}`
+                    },
+                    // prevents decimal errors - stripe needs cents
+                    unit_amount: Math.round(finalPrice * 100)
+                },
+                quantity: 1
+            },
+            ],
+            mode: 'payment',
+            success_url: `${YOUR_DOMAIN}?success?session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `${YOUR_DOMAIN}/cancel`
+        });
+
         const bookingData = new Booking({
             finalPrice,
             basePrice,
             weatherCharge,
             clientId: userId,
             roomId,
-            roomName: room.title
+            roomName: room.title,
+            stripeSessionId: session.id
         });
-
-        // we create a stripe session here
 
         await bookingData.save();
 
-        res.status(201).json(bookingData);
+        // res.status(201).json(bookingData);
+        // return stripe URL to client
+        res.status(201).json({
+            message: 'Booking Initiated',
+            url: session.url,
+            bookingId: bookingData._id
+        });
 
     
     } catch(error) {

@@ -18,7 +18,8 @@ const bookingSchema = new Schema({
         type: String,
         required: true
     },
-    roomName: String
+    roomName: String,
+    stripeSessionId: String
 }, {timestamps: true});
 
 module.exports = mongoose.model('Booking', bookingSchema);
