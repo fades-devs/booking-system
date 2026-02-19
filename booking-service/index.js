@@ -35,7 +35,31 @@ app.get('/', (req, res) => {
     res.send('Hello World!')
 });
 
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const YOUR_DOMAIN = 'http://localhost:3002';
+// endpoint that creates a checkout session
+app.post('/create-checkout-session', async (req, res) => {
+
+  const session = await stripe.checkout.sessions.create({
+    // add try catch block after
+    line_items: [
+      {
+        // Provide the exact Price ID (for example, price_1234) of the product you want to sell
+        // price: '{{PRICE_ID}}', 
+        price: 'price_1T2XbuEAhxJTB6pG2Tfnh96F', // for testing
+        quantity: 1,
+      },
+    ],
+    mode: 'payment',
+    success_url: `${YOUR_DOMAIN}?success=true`,
+  });
+
+//   res.redirect(303, session.url);
+  res.status(200).json({ url: session.url }); // for testing
+});
+
 // route to create new booking
+// make room ID parameter not body
 app.post('/api/v1/booking', checkJwt, async (req, res) => {
 
     try {
@@ -91,6 +115,8 @@ app.post('/api/v1/booking', checkJwt, async (req, res) => {
             roomName: room.title
         });
 
+        // we create a stripe session here
+
         await bookingData.save();
 
         res.status(201).json(bookingData);
@@ -101,11 +127,71 @@ app.post('/api/v1/booking', checkJwt, async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error'});
     }
 
-    
-
-
-
     //
+});
+
+// route to cancel booking
+app.delete('/api/v1/bookings/:id', checkJwt, async (req, res) => {
+    try {
+
+        const clientId = req.auth.payload.sub;
+        
+        // call user API to get user
+        const userData = await axios.get(`http://localhost:3000/api/v1/user/${clientId}`);
+        const user = userData.data
+        
+        if (!user) {
+            res.status(404).json({message: "User not found."});
+        }
+        
+        // Check if user is client
+        if (user.role != 'client') {
+            return res.status(400).json({message: "Unauthorized User."})
+        }
+
+        const id = req.params.id;
+
+        // for error handling - check if booking exists
+        const bookingExist = await Booking.findOne({_id: id, clientId});
+        if (!bookingExist) {
+            return res.status(404).json({message: "Booking Not Found or Unauthorized User."})
+        }
+
+        await Booking.findByIdAndDelete(id);
+        res.status(201).json({message: "Booking Cancelled successfully."});
+
+
+    } catch (error) {
+        console.error("Error canceling the booking:", error);
+        res.status(500).json({ error: 'Internal Server Error'});
+    }
+});
+
+// route to view bookings for client
+app.get('/api/v1/bookings/by-client', checkJwt, async (req, res) => {
+    try {
+        const clientId = req.auth.payload.sub;
+
+        // call user API to get user
+        const userData = await axios.get(`http://localhost:3000/api/v1/user/${clientId}`);
+        const user = userData.data
+        
+        if (!user) {
+            res.status(404).json({message: "User not found."});
+        }
+        
+        // Check if user is client
+        if (user.role != 'client') {
+            return res.status(400).json({message: "Unauthorized User."})
+        }
+
+        const bookingData = await Booking.find({clientId});
+        res.status(200).json(bookingData);
+
+    } catch(error) {
+        console.error('Error fetching bookings for client:', error);
+        res.status(500).json({error: 'Internal Server Error'});
+    }
 });
 
 
