@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const { auth } = require('express-oauth2-jwt-bearer');
 const axios = require('axios');
+const cors = require('cors')
 
 const Booking = require('./Booking');
 
@@ -13,6 +14,8 @@ dotenv.config();
 const port = process.env.PORT || 3002; 
 
 app.use(express.json());
+
+app.use(cors());
 
 
 // connect to database
@@ -70,13 +73,13 @@ app.post('/api/v1/booking', checkJwt, async (req, res) => {
         // get user auth ID and role
         const userId = req.auth.payload.sub;
 
-        // call user API to get user
-        const userData = await axios.get(`http://localhost:3000/api/v1/user/${userId}`);
-        const user = userData.data
-        // Check if user is client
-        if (user.role != 'client') {
-            return res.status(400).json({message: "Unauthorized User."})
-        }
+        // // call user API to get user
+        // const userData = await axios.get(`http://localhost:3000/api/v1/user/${userId}`);
+        // const user = userData.data
+        // // Check if user is client
+        // if (user.role != 'client') {
+        //     return res.status(400).json({message: "Unauthorized User."})
+        // }
         
         // get room details
         const roomData = await axios.get(`http://localhost:3001/api/v1/rooms/${roomId}`);
