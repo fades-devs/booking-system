@@ -8,7 +8,7 @@ const LoginButton = () => {
 
         !isAuthenticated && (
             <button onClick={() => loginWithRedirect()}>
-                Sign In
+                Login As Client
             </button>
         )
         
