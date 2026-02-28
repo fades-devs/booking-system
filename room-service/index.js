@@ -2,6 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const axios = require('axios');
+const cors = require('cors');
 
 const { auth } = require('express-oauth2-jwt-bearer');
 
@@ -14,6 +15,8 @@ const Room = require('./Room');
 
 
 const app = express();
+
+app.use(cors());
 
 // const s3 = new S3Client({
 //     credentials: {
