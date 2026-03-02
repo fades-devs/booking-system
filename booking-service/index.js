@@ -167,18 +167,18 @@ app.delete('/api/v1/bookings/:id', checkJwt, async (req, res) => {
 
         const clientId = req.auth.payload.sub;
         
-        // call user API to get user
-        const userData = await axios.get(`http://localhost:3000/api/v1/user/${clientId}`);
-        const user = userData.data
+        // // call user API to get user
+        // const userData = await axios.get(`http://localhost:3000/api/v1/user/${clientId}`);
+        // const user = userData.data
         
-        if (!user) {
-            res.status(404).json({message: "User not found."});
-        }
+        // if (!user) {
+        //     res.status(404).json({message: "User not found."});
+        // }
         
-        // Check if user is client
-        if (user.role != 'client') {
-            return res.status(400).json({message: "Unauthorized User."})
-        }
+        // // Check if user is client
+        // if (user.role != 'client') {
+        //     return res.status(400).json({message: "Unauthorized User."})
+        // }
 
         const id = req.params.id;
 
@@ -203,18 +203,18 @@ app.get('/api/v1/bookings/by-client', checkJwt, async (req, res) => {
     try {
         const clientId = req.auth.payload.sub;
 
-        // call user API to get user
-        const userData = await axios.get(`http://localhost:3000/api/v1/user/${clientId}`);
-        const user = userData.data
+        // // call user API to get user
+        // const userData = await axios.get(`http://localhost:3000/api/v1/user/${clientId}`);
+        // const user = userData.data
         
-        if (!user) {
-            res.status(404).json({message: "User not found."});
-        }
+        // if (!user) {
+        //     res.status(404).json({message: "User not found."});
+        // }
         
-        // Check if user is client
-        if (user.role != 'client') {
-            return res.status(400).json({message: "Unauthorized User."})
-        }
+        // // Check if user is client
+        // if (user.role != 'client') {
+        //     return res.status(400).json({message: "Unauthorized User."})
+        // }
 
         const bookingData = await Booking.find({clientId});
         res.status(200).json(bookingData);
