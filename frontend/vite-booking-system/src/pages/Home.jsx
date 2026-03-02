@@ -53,7 +53,7 @@ const Home = () => {
 
         <>
         <h3>Welcome, {user?.name}</h3>
-        <LogoutButton />
+        {/* <LogoutButton /> */}
         <h2>List of Conference Rooms</h2>
         <form onSubmit={handleSearch}>
             <input type="text" placeholder="Search for specific room..." value={searchQuery}
