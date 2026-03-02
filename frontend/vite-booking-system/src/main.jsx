@@ -19,6 +19,7 @@ createRoot(document.getElementById('root')).render(
           audience: import.meta.env.VITE_AUTH0_AUDIENCE //Probs not needed
         }
       }
+      cacheLocation='localstorage'
       >
         <App />
       </Auth0Provider>
