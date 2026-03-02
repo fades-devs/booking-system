@@ -7,7 +7,7 @@ import {Route, Routes} from 'react-router-dom';
 
 import Home from './pages/Home';
 import MyBookings from './pages/MyBookings';
-import Navbar from './components/client/NavBar';
+import Navbar from './components/client/Navbar';
 
 function App() {
 
