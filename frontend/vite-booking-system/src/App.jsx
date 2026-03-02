@@ -6,14 +6,20 @@ import './App.css'
 import {Route, Routes} from 'react-router-dom';
 
 import Home from './pages/Home';
+import MyBookings from './pages/MyBookings';
+import Navbar from './components/client/NavBar';
 
 function App() {
 
   return (
     <>
+    <header>
+      <Navbar />
+    </header>
       <main>
         <Routes>
           <Route path="/" element={ <Home /> } />
+          <Route path="/my-bookings" element={ <MyBookings />} />
         </Routes>
       </main>
     </>
