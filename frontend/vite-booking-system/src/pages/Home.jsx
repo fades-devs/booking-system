@@ -2,7 +2,7 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import LoginButton from '../components/LoginButton';
 import LogoutButton from '../components/LogoutButton';
-import RoomCard from "../components/RoomCard";
+import RoomCardClient from "../components/RoomCardClient";
 import axios from "axios";
 import { useState, useEffect } from "react";
 
@@ -38,10 +38,6 @@ const Home = () => {
     const handleSearch = async (e) => {
         e.preventDefault()
     }
-
-    const removeRoomScreen = (deletedId) => {
-        setRooms((prevRooms) => prevRooms.filter(r => r._id !== deletedId))
-    }
     
     if (!isAuthenticated) {
         return (
@@ -75,7 +71,7 @@ const Home = () => {
                 {/* Grid Layout */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {rooms.filter((room) => room.title.toLowerCase().includes(searchQuery.toLowerCase()))
-                    .map((room) => (<RoomCard room={room} key={room._id} onCancel={removeRoomScreen}/>))
+                    .map((room) => (<RoomCardClient room={room} key={room._id} />))
                     }
                 </div>
                 {/* If no results */}

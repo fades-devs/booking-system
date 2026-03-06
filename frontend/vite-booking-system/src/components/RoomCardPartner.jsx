@@ -3,7 +3,7 @@ import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useState } from "react";
 
-const RoomCard = ({room, onCancel}) => {
+const RoomCardPartner = ({room, onCancel}) => {
 
     const [isEditing, setIsEditing] = useState(false)
 
@@ -13,25 +13,6 @@ const RoomCard = ({room, onCancel}) => {
     const [location, setLocation] = useState('')
 
    const {getAccessTokenSilently} = useAuth0();
-
-    const handleBooking = async () => {
-            try {
-                const token = await getAccessTokenSilently();
-                const response = await axios.post(
-                    `http://localhost:3002/api/v1/booking`,
-                    {roomId: room._id},
-                    {
-                        headers: {Authorization: `Bearer ${token}`}
-                    }
-                );
-                if (response.data.url) {
-                    window.location.href = response.data.url
-                }
-            } catch (err) {
-                console.log('Failed to create booking...');
-                alert('Booking failed. Please try again.');
-        }
-    }
 
     const handleUpdate = async () => {
         try {
@@ -122,7 +103,6 @@ const RoomCard = ({room, onCancel}) => {
             </div>
             {/* Bottoms actions (book, update, delete) */}
             <div className="mt-auto flex flex-col gap-4">
-                <button onClick={handleBooking} className="w-full bg-slate-900 text-white font-medium py-2 rounded-md hover:bg-slate-800 hover:scale-102 transition-all">Book Room</button>
                 <div className="flex justify-between border-t border-slate-100 pt-3">
                     <button onClick={() => setIsEditing(true)} className="text-sm font-medium text-slate-400 hover:text-rose-400 transition-all">Update</button>
                     <button onClick={handleDelete} className="text-sm font-medium text-slate-400 hover:text-rose-400 transition-all">Delete</button>
@@ -133,4 +113,4 @@ const RoomCard = ({room, onCancel}) => {
 }
 
 
-export default RoomCard
+export default RoomCardPartner

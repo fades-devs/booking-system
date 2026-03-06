@@ -1,5 +1,5 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import RoomCard from "../components/RoomCard";
+import RoomCardPartner from "../components/RoomCardPartner";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -66,6 +66,9 @@ const Dashboard = () => {
 
     }
 
+    const removeRoomScreen = (deletedId) => {
+        setRooms((prevRooms) => prevRooms.filter(r => r._id !== deletedId))
+    }
 
     if (!isAuthenticated) {
         return (
@@ -117,7 +120,7 @@ const Dashboard = () => {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {rooms.length > 0 ? (
-                rooms.map((room) => <RoomCard room={room} key={room._id} />)
+                rooms.map((room) => <RoomCardPartner room={room} key={room._id} onCancel={removeRoomScreen} />)
             ) : (
                 <div className="col-span-full py-16 text-center border-2 border-dashed border-slate-200 rounded-xl bg-slate-500 font-medium">
                     No room listings yet. Create new listing using the form above.
