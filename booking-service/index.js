@@ -40,6 +40,7 @@ app.get('/', (req, res) => {
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const YOUR_DOMAIN = 'http://localhost:3002';
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173/booking-system/tree/main/frontend/vite-booking-system';
 // endpoint that creates a checkout session
 app.post('/create-checkout-session', async (req, res) => {
 
@@ -128,8 +129,8 @@ app.post('/api/v1/booking', checkJwt, async (req, res) => {
             },
             ],
             mode: 'payment',
-            success_url: `${YOUR_DOMAIN}?success?session_id={CHECKOUT_SESSION_ID}`,
-            cancel_url: `${YOUR_DOMAIN}/cancel`
+            success_url: `${FRONTEND_URL}/my-bookings?success=true&session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `${FRONTEND_URL}/`
         });
 
         const bookingData = new Booking({
