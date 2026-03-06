@@ -19,6 +19,8 @@ const Dashboard = () => {
     const [basePrice, setBasePrice] = useState('')
     const [location, setLocation] = useState('')
 
+    const [files, setFiles] = useState([]);
+
     useEffect(() => {
         const getPartnerRooms = async () => {
             try {
@@ -40,23 +42,32 @@ const Dashboard = () => {
         getPartnerRooms()
     }, [])
 
-    const handleCreate = async () => {
+    const handleCreate = async (e) => {
+
+        e.preventDefault();
+
+        // create formdata object instead of normal json
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('capacity', capacity)
+        formData.append('basePrice', basePrice)
+        formData.append('location', location)
+
+        for (let i = 0; i < files.length; i++) {
+            formData.append('files', files[i]);
+        }
 
         try {
             const token = await getAccessTokenSilently();
             const response = axios.post(
                 `http://localhost:3001/api/v1/room`,
+                formData,
                 {
-                    title: title,
-                    capacity: capacity,
-                    basePrice: basePrice,
-                    location: location
-                },
-                {
-                    headers: {Authorization: `Bearer ${token}`}
+                    headers: {Authorization: `Bearer ${token}`, 'Content-Type': 'multi-part/form-data'}
                 }
             )
             alert('Room Created Successfully!')
+
         } catch(err) {
             console.log('Failed to create room:', err)
             setError(err)
@@ -106,6 +117,13 @@ const Dashboard = () => {
                             <label className="text-sm font-semibold text-slate-700 mb-2">Room Location</label>
                             <input type="text" placeholder="Enter room location..." value={location} onChange={(e) => setLocation(e.target.value)}
                             className="p-3 border border-slate-300 rounded-lg focus:outline-none focus:border-slate-900 transition-all"/>
+                        </div>
+                        <div className="flex flex-col md:col-span-2">
+                            <label className="text-sm font-semibold text-slate-700 mb-2">Room Pictures (Up to 3)</label>
+                            <input type="file" multiple accept="image/*" onChange={(e) => setFiles(e.target.files)}
+                            className="p-3 border border-slate-300 rounded-lg focus:outline-none focus:border-slate-900 transition-all
+                            file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-slate-100
+                            file:text-slate-700 hover:file:bg-slate-200" />
                         </div>
                     </div>
                     {/* Submit button */}

@@ -75,7 +75,7 @@ app.post('/api/upload', upload.array('files', 3), async (req, res) => {
 });
 
 // route to create new room
-app.post('/api/v1/room', checkJwt, async (req, res) => {
+app.post('/api/v1/room', checkJwt, upload.array('files', 3), async (req, res) => {
     try {
 
         // get ID of authenticated user
@@ -94,21 +94,24 @@ app.post('/api/v1/room', checkJwt, async (req, res) => {
         //     return res.status(400).json({message: "Unauthorized User."})
         // }
 
+        // extract s3 urls from uploaded files
+        const pictureUrls = req.files ? req.files.map(file => file.location) : [];
+
+        // check if room already exists (first)
+        const {title} = req.body;
+        const roomExist = await Room.findOne({title, partnerId});
+        if (roomExist) {
+            return res.status(400).json({message: "Room already exists or unauthorized user."})
+        }
+
         const roomData = new Room({
             title: req.body.title,
             capacity: req.body.capacity,
             basePrice: req.body.basePrice,
             location: req.body.location,
-            pictures: [], // empty for now
+            pictures: pictureUrls,
             partnerId
         });
-
-        // check if room already exists
-        const {title} = roomData;
-        const roomExist = await Room.findOne({title, partnerId});
-        if (roomExist) {
-            return res.status(400).json({message: "Room already exists or unauthorized user."})
-        }
 
         // if not, save in DB (for partner)
         await roomData.save()
