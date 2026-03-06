@@ -81,18 +81,18 @@ app.post('/api/v1/room', checkJwt, async (req, res) => {
         // get ID of authenticated user
         const partnerId = req.auth.payload.sub;
 
-        // call user API to get user
-        const userData = await axios.get(`http://localhost:3000/api/v1/user/${partnerId}`);
-        const user = userData.data
+        // // call user API to get user
+        // const userData = await axios.get(`http://localhost:3000/api/v1/user/${partnerId}`);
+        // const user = userData.data
 
-        if (!user) {
-            res.status(404).json({message: "User not found."});
-        }
+        // if (!user) {
+        //     res.status(404).json({message: "User not found."});
+        // }
 
-        // Check if user is partner
-        if (user.role != 'partner') {
-            return res.status(400).json({message: "Unauthorized User."})
-        }
+        // // Check if user is partner
+        // if (user.role != 'partner') {
+        //     return res.status(400).json({message: "Unauthorized User."})
+        // }
 
         const roomData = new Room({
             title: req.body.title,
@@ -196,18 +196,18 @@ app.get('/api/v1/rooms/by-partner', checkJwt, async (req, res) => {
     try {
         const partnerId = req.auth.payload.sub;
 
-        // call user API to get user
-        const userData = await axios.get(`http://localhost:3000/api/v1/user/${partnerId}`);
-        const user = userData.data
+        // // call user API to get user
+        // const userData = await axios.get(`http://localhost:3000/api/v1/user/${partnerId}`);
+        // const user = userData.data
 
-        if (!user) {
-            res.status(404).json({message: "User not found."});
-        }
+        // if (!user) {
+        //     res.status(404).json({message: "User not found."});
+        // }
 
-        // Check if user is partner
-        if (user.role != 'partner') {
-            return res.status(400).json({message: "Unauthorized User."})
-        }
+        // // Check if user is partner
+        // if (user.role != 'partner') {
+        //     return res.status(400).json({message: "Unauthorized User."})
+        // }
 
 
         const rooms = await Room.find({partnerId});
@@ -243,18 +243,18 @@ app.put('/api/v1/rooms/:id', checkJwt, async (req, res) => {
         
         const partnerId = req.auth.payload.sub;
 
-        // call user API to get user
-        const userData = await axios.get(`http://localhost:3000/api/v1/user/${partnerId}`);
-        const user = userData.data
+        // // call user API to get user
+        // const userData = await axios.get(`http://localhost:3000/api/v1/user/${partnerId}`);
+        // const user = userData.data
 
-        if (!user) {
-            res.status(404).json({message: "User not found."});
-        }
+        // if (!user) {
+        //     res.status(404).json({message: "User not found."});
+        // }
 
-        // Check if user is partner
-        if (user.role != 'partner') {
-            return res.status(400).json({message: "Unauthorized User."})
-        }
+        // // Check if user is partner
+        // if (user.role != 'partner') {
+        //     return res.status(400).json({message: "Unauthorized User."})
+        // }
 
         const id = req.params.id;
         const roomExist = await Room.findOne({_id: id, partnerId});
@@ -278,18 +278,18 @@ app.delete('/api/v1/rooms/:id', checkJwt, async (req, res) => {
 
         const partnerId = req.auth.payload.sub;
 
-        // call user API to get user
-        const userData = await axios.get(`http://localhost:3000/api/v1/user/${partnerId}`);
-        const user = userData.data
+        // // call user API to get user
+        // const userData = await axios.get(`http://localhost:3000/api/v1/user/${partnerId}`);
+        // const user = userData.data
 
-        if (!user) {
-            res.status(404).json({message: "User not found."});
-        }
+        // if (!user) {
+        //     res.status(404).json({message: "User not found."});
+        // }
 
-        // Check if user is partner
-        if (user.role != 'partner') {
-            return res.status(400).json({message: "Unauthorized User."})
-        }
+        // // Check if user is partner
+        // if (user.role != 'partner') {
+        //     return res.status(400).json({message: "Unauthorized User."})
+        // }
         
         const id = req.params.id;
         const roomExist = await Room.findOne({_id: id, partnerId});
