@@ -14,17 +14,18 @@ const Navbar = () => {
             <Link to="/" className="text-xl font-bold text-rose-400 hover:scale-105 transition-all">ConfBook
             </Link>
             <div className="hidden sm:flex items-center gap-5 font-medium">
+                <Link to="/" className="hover:text-rose-400 transition-all">Home</Link>
                 {
                     isAuthenticated && (
                         <>
-                        <Link to="/" className="hover:text-rose-400 transition-all">Home</Link>
                         <Link to="/my-bookings" className="hover:text-rose-400 transition-all">My Bookings</Link>
                         <Link to="/dashboard" className="hover:text-rose-400 transition-all">Dashboard</Link>
                         </>
                     )
                 }
                 {
-                    ( isAuthenticated ? <LogoutButton /> : <LoginButton /> )
+                    ( isAuthenticated ? <LogoutButton /> : <LoginButton />
+                    )
                 }
             </div>
             {/* Mobile menu button */}
