@@ -182,10 +182,19 @@ app.delete('/api/v1/bookings/:id', checkJwt, async (req, res) => {
 
         const id = req.params.id;
 
-        // for error handling - check if booking exists
-        const bookingExist = await Booking.findOne({_id: id, clientId});
+        // for error handling - check if booking exists / today's booking only
+        const today = new Date();
+        const startDay = new Date(today.setHours(0, 0, 0, 0));
+        const endDay = new Date(today.setHours(23, 59, 59, 999));
+
+        const bookingExist = await Booking.findOne({
+            _id: id,
+            clientId,
+            createdAt: {$gte: startDay, $lte: endDay}
+        });
+
         if (!bookingExist) {
-            return res.status(404).json({message: "Booking Not Found or Unauthorized User."})
+            return res.status(404).json({message: "Booking Not Found, Unauthorized User or Old Booking."})
         }
 
         await Booking.findByIdAndDelete(id);
