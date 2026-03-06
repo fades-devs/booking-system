@@ -38,6 +38,10 @@ const MyBookings = () => {
 
     }, []);
 
+    const removeBookingScreen = (deletedId) => {
+        setBookings((prevBookings) => prevBookings.filter(b => b._id !== deletedId))
+    }
+
 
     if (!isAuthenticated) {
         return (
@@ -59,7 +63,7 @@ const MyBookings = () => {
             {/* List container */}
             <div className="flex flex-col gap-4">
                 {bookings.length > 0 ? (
-                    bookings.map((booking) => <Booking booking={booking} key={booking._id} />)
+                    bookings.map((booking) => <Booking booking={booking} key={booking._id} onCancel={removeBookingScreen} />)
                 ) : (
                     <div className="flex flex-col items-center justify-center py-16 bg-slate-50 rounded-xl border-2 border-slate-200 border-dashed">
                         <p className="text-lg text-slate-500 font-medium mb-2">You don't have any active bookings.</p>

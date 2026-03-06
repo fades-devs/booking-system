@@ -3,7 +3,7 @@ import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useState } from "react";
 
-const RoomCard = ({room}) => {
+const RoomCard = ({room, onCancel}) => {
 
     const [isEditing, setIsEditing] = useState(false)
 
@@ -64,7 +64,10 @@ const RoomCard = ({room}) => {
                     headers: {Authorization: `Bearer ${token}`}
                 }
             )
-            alert('Room Deleted Successfully!');
+
+            onCancel(room._id);
+
+
         } catch(err) {
             console.log('Failed to delete room listing:', err)
         }

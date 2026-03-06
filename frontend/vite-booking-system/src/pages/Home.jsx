@@ -38,6 +38,10 @@ const Home = () => {
     const handleSearch = async (e) => {
         e.preventDefault()
     }
+
+    const removeRoomScreen = (deletedId) => {
+        setRooms((prevRooms) => prevRooms.filter(r => r._id !== deletedId))
+    }
     
     if (!isAuthenticated) {
         return (
@@ -71,7 +75,7 @@ const Home = () => {
                 {/* Grid Layout */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {rooms.filter((room) => room.title.toLowerCase().includes(searchQuery.toLowerCase()))
-                    .map((room) => (<RoomCard room={room} key={room._id} />))
+                    .map((room) => (<RoomCard room={room} key={room._id} onCancel={removeRoomScreen}/>))
                     }
                 </div>
                 {/* If no results */}

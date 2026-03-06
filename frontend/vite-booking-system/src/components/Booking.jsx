@@ -1,10 +1,10 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import axios from "axios";
+import { useState } from "react";
 
-const Booking = ({booking}) => {
+const Booking = ({booking, onCancel}) => {
 
     const {getAccessTokenSilently} = useAuth0();
-
 
     const handleCancel = async () => {
         try {
@@ -15,9 +15,14 @@ const Booking = ({booking}) => {
                 }
             );
 
+            onCancel(booking._id);
+
         } catch(err) {
             console.log('Error cancelling the booking:', err)
             alert('Failed to cancel the booking...')
+        }
+        finally {
+            setLoading(false)
         }
     }
 
