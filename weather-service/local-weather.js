@@ -1,10 +1,12 @@
 const express = require('express');
 const { handler } = require('./index');
 const dotenv = require('dotenv');
+const helmet = require('helmet');
 
 const app = express();
 const PORT = process.env.PORT || 3003;
 app.use(express.json());
+app.use(helmet());
 
 // route to test the weather api locally without aws
 app.get('/api/weather', async (req, res) => {

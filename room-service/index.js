@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const axios = require('axios');
 const cors = require('cors');
+const helmet = require('helmet');
 
 const { auth } = require('express-oauth2-jwt-bearer');
 
@@ -30,6 +31,7 @@ app.use(cors({
 // });
 
 app.use(express.json());
+app.use(helmet());
 
 // load environment variables
 dotenv.config();

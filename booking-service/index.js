@@ -3,7 +3,8 @@ const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const { auth } = require('express-oauth2-jwt-bearer');
 const axios = require('axios');
-const cors = require('cors')
+const cors = require('cors');
+const helmet = require('helmet');
 
 const Booking = require('./Booking');
 
@@ -18,6 +19,7 @@ const MONGO_URI = process.env.MONGO_URI
 
 
 app.use(express.json());
+app.use(helmet());
 
 app.use(cors({
     origin: process.env.FRONTEND_URL,

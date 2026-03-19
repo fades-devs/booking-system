@@ -3,11 +3,13 @@ const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const { auth } = require('express-oauth2-jwt-bearer');
 const User = require('./User');
+const helmet = require('helmet');
 
 
 const app = express();
 
 app.use(express.json());
+app.use(helmet());
 
 
 // load environment variables
