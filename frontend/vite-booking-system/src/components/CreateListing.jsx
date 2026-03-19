@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 
+import toast , {Toaster} from "react-hot-toast";
+
 const ROOM_API_URL = import.meta.env.VITE_ROOM_API_URL
 
 const CreateListing = () => {
@@ -36,18 +38,19 @@ const CreateListing = () => {
 
         try {
             const token = await getAccessTokenSilently();
-            const response = axios.post(
+            const response = await axios.post(
                 `${ROOM_API_URL}/api/v1/room`,
                 formData,
                 {
                     headers: {Authorization: `Bearer ${token}`, 'Content-Type': 'multi-part/form-data'}
                 }
             )
-            alert('Room Created Successfully!')
-
+            toast.success("Room created successfully!")
+            
         } catch(err) {
             console.log('Failed to create room:', err)
             setError(err)
+            toast.error("Failed to create room.")
         } finally {
             setLoading(false)
         }
@@ -57,6 +60,8 @@ const CreateListing = () => {
     return (
         
         <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8 mb-12">
+
+
             <h2 className="text-2xl font-bold mb-6 border-b border-slate-100 pb-4">Create New Room Listing</h2>
             <form onSubmit={handleCreate} className="flex flex-col">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

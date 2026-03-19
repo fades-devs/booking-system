@@ -3,6 +3,9 @@ import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useState } from "react";
 
+import toast from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
+
 const BOOKING_API_URL = import.meta.env.VITE_BOOKING_API_URL
 
 const RoomCardClient = ({room}) => {
@@ -24,7 +27,7 @@ const RoomCardClient = ({room}) => {
                 }
             } catch (err) {
                 console.log('Failed to create booking...');
-                alert('Booking failed. Please try again.');
+                toast.error("Failed to book room.")
         }
     }
 
@@ -32,6 +35,7 @@ const RoomCardClient = ({room}) => {
 
     return (
         <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden flex flex-col hover:shadow-lg transition-all">
+            
             <img src={imgUrl} alt={room.title} className="w-full h-48 object-cover" />
             {/* Header (title, location) */}
             <div className="p-5 flex flex-col grow">
@@ -46,7 +50,7 @@ const RoomCardClient = ({room}) => {
                 </div>
                 {/* Bottoms actions (book) */}
                 <div className="mt-auto flex flex-col gap-4">
-                    <button onClick={handleBooking} className="w-full bg-slate-900 text-white font-medium py-2 rounded-md hover:bg-slate-800 hover:scale-102 transition-all">Book Room</button>
+                    <button onClick={handleBooking} className="w-full bg-slate-900 text-white font-medium py-2 rounded-md hover:bg-slate-800 hover:scale-102 transition-all cursor-pointer">Book Room</button>
                 </div>
             </div>
         </div>

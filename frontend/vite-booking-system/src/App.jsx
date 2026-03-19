@@ -6,6 +6,9 @@ import './App.css'
 import {Route, Routes} from 'react-router-dom';
 import {useIdleTimer} from 'react-idle-timer';
 
+import toast from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
+
 import Home from './pages/Home';
 import MyBookings from './pages/MyBookings';
 import Navbar from './components/Navbar';
@@ -18,7 +21,7 @@ function App() {
 
   const onIdle = () => {
     if (isAuthenticated) {
-      alert('You have been logged out due to inactivity.');
+      toast('You have been logged out due to inactivity.');
       logout({logoutParams: {returnTo: window.location.origin}})
     }
   }
@@ -34,6 +37,35 @@ function App() {
       <Navbar />
     </header>
       <main className='flex flex-col grow w-full mx-auto p-5'>
+
+        <Toaster
+          position="top-center"
+          reverseOrder={false}
+          gutter={8}
+          containerClassName=""
+          containerStyle={{}}
+          toasterId="default"
+          toastOptions={{
+              // Define default options
+              className: '',
+              duration: 5000,
+              removeDelay: 1000,
+              style: {
+              background: '#363636',
+              color: '#fff',
+              },
+
+              // Default options for specific types
+              success: {
+              duration: 3000,
+              iconTheme: {
+                  primary: 'green',
+                  secondary: 'black',
+              },
+              },
+          }}
+        />
+
         <Routes>
           <Route path="/" element={ <Home /> } />
           <Route path="/my-bookings" element={ <MyBookings />} />
