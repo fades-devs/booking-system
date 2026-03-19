@@ -32,7 +32,9 @@ app.use(express.json());
 dotenv.config();
 const upload = require('./upload');
 
-const port = process.env.PORT || 3001; 
+const PORT = process.env.PORT || 3001; 
+
+const MONGO_URI = process.env.MONGO_URI
 
 // const bucketName = process.env.AWS_BUCKET_NAME
 // const region = process.env.AWS_BUCKET_REGION
@@ -41,7 +43,7 @@ const port = process.env.PORT || 3001;
 
 
 // connect to database
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect(MONGO_URI)
 .then(() => console.log('MongoDB Database connected successfully'))
 .catch((err) => {
     console.error('Database connection error', err);
@@ -312,6 +314,6 @@ app.delete('/api/v1/rooms/:id', checkJwt, async (req, res) => {
 
 
 // start server
-app.listen(port, () => {
-    console.log(`Listening at localhost:${port}`);
+app.listen(PORT, () => {
+    console.log(`Listening at localhost:${PORT}`);
 });

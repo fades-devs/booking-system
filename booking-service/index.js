@@ -11,7 +11,11 @@ const app = express();
 
 // load environment variables
 dotenv.config();
-const port = process.env.PORT || 3002; 
+
+const PORT = process.env.PORT || 3002;
+
+const MONGO_URI = process.env.MONGO_URI
+
 
 app.use(express.json());
 
@@ -19,7 +23,7 @@ app.use(cors());
 
 
 // connect to database
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect(MONGO_URI)
 .then(() => console.log('MongoDB Database connected successfully'))
 .catch((err) => {
     console.error('Database connection error', err);
@@ -39,28 +43,33 @@ app.get('/', (req, res) => {
 });
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-const YOUR_DOMAIN = 'http://localhost:3002';
-const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173/booking-system/tree/main/frontend/vite-booking-system';
+const DOMAIN = process.env.BOOKING_API_URL
+const FRONTEND_URL = process.env.FRONTEND_URL
+const ROOM_API_URL = process.env.ROOM_API_URL
+const WEATHER_API_URL = process.env.WEATHER_API_URL
+
+// const YOUR_DOMAIN = 'http://localhost:3002';
+// const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173/booking-system/tree/main/frontend/vite-booking-system';
 // endpoint that creates a checkout session
-app.post('/create-checkout-session', async (req, res) => {
+// app.post('/create-checkout-session', async (req, res) => {
 
-  const session = await stripe.checkout.sessions.create({
-    // add try catch block after
-    line_items: [
-      {
-        // Provide the exact Price ID (for example, price_1234) of the product you want to sell
-        // price: '{{PRICE_ID}}', 
-        price: 'price_1T2XbuEAhxJTB6pG2Tfnh96F', // for testing
-        quantity: 1,
-      },
-    ],
-    mode: 'payment',
-    success_url: `${YOUR_DOMAIN}?success=true`,
-  });
+//   const session = await stripe.checkout.sessions.create({
+//     // add try catch block after
+//     line_items: [
+//       {
+//         // Provide the exact Price ID (for example, price_1234) of the product you want to sell
+//         // price: '{{PRICE_ID}}', 
+//         price: 'price_1T2XbuEAhxJTB6pG2Tfnh96F', // for testing
+//         quantity: 1,
+//       },
+//     ],
+//     mode: 'payment',
+//     success_url: `${DOMAIN}?success=true`,
+//   });
 
-//   res.redirect(303, session.url);
-  res.status(200).json({ url: session.url }); // for testing
-});
+// //   res.redirect(303, session.url);
+//   res.status(200).json({ url: session.url }); // for testing
+// });
 
 // route to create new booking
 // make room ID parameter not body
@@ -83,7 +92,7 @@ app.post('/api/v1/booking', checkJwt, async (req, res) => {
         // }
         
         // get room details
-        const roomData = await axios.get(`http://localhost:3001/api/v1/rooms/${roomId}`);
+        const roomData = await axios.get(`${ROOM_API_URL}/api/v1/rooms/${roomId}`);
         const room = roomData.data
 
                 
@@ -104,7 +113,7 @@ app.post('/api/v1/booking', checkJwt, async (req, res) => {
         // extract price data and calculate final price
         const basePrice = room.basePrice;
 
-        const weatherCharge = await axios.get(`http://localhost:3003/api/weather?location=${room.location}`);
+        const weatherCharge = await axios.get(`${WEATHER_API_URL}/api/weather?location=${room.location}`);
 
         const charge = weatherCharge.data.charge;
 
@@ -237,6 +246,6 @@ app.get('/api/v1/bookings/by-client', checkJwt, async (req, res) => {
 
 
 // start server
-app.listen(port, () => {
-    console.log(`Listening at localhost:${port}`);
+app.listen(PORT, () => {
+    console.log(`Listening at localhost:${PORT}`);
 });

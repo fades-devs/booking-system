@@ -6,6 +6,8 @@ import RoomCardClient from "../components/RoomCardClient";
 import axios from "axios";
 import { useState, useEffect } from "react";
 
+const ROOM_API_URL = import.meta.env.VITE_ROOM_API_URL;
+
 const Home = () => {
 
     const {user, isAuthenticated} = useAuth0();
@@ -23,7 +25,7 @@ const Home = () => {
     useEffect(() => {
         const getRooms = async () => {
             try {
-                const response = await axios.get(`http://localhost:3001/api/v1/rooms`);
+                const response = await axios.get(`${ROOM_API_URL}/api/v1/rooms`);
                 setRooms(response.data);
             } catch (err) {
                 setError(err);

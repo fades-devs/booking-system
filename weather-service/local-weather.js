@@ -1,8 +1,9 @@
 const express = require('express');
 const { handler } = require('./index');
+const dotenv = require('dotenv');
 
 const app = express();
-const port = 3003;
+const PORT = process.env.PORT || 3003;
 app.use(express.json());
 
 // route to test the weather api locally without aws
@@ -22,7 +23,7 @@ app.get('/api/weather', async (req, res) => {
     }
 });
 
-app.listen(port, () => {
-    console.log(`Local weather app test running at localhost:${port}`);
+app.listen(PORT, () => {
+    console.log(`Local weather app test running at localhost:${PORT}`);
 });
 

@@ -2,6 +2,8 @@ import { useAuth0 } from "@auth0/auth0-react";
 import axios from "axios";
 import { useState } from "react";
 
+const BOOKING_API_URL = import.meta.env.VITE_BOOKING_API_URL
+
 const Booking = ({booking, onCancel}) => {
 
     const {getAccessTokenSilently} = useAuth0();
@@ -9,7 +11,7 @@ const Booking = ({booking, onCancel}) => {
     const handleCancel = async () => {
         try {
             const token = await getAccessTokenSilently();
-            const response = await axios.delete(`http://localhost:3002/api/v1/bookings/${booking._id}`,
+            const response = await axios.delete(`${BOOKING_API_URL}/api/v1/bookings/${booking._id}`,
                 {
                     headers: {Authorization: `Bearer ${token}`}
                 }

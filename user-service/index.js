@@ -12,11 +12,13 @@ app.use(express.json());
 
 // load environment variables
 dotenv.config();
-const port = process.env.PORT || 3000; 
+const PORT = process.env.PORT || 3000; 
+
+const MONGO_URI = process.env.MONGO_URI
 
 
 // connect to database
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect(MONGO_URI)
 .then(() => console.log('MongoDB Database connected successfully'))
 .catch((err) => {
     console.error('Database connection error', err);
@@ -99,6 +101,6 @@ app.get('/', (req, res) => {
 });
 
 // start server
-app.listen(port, () => {
-    console.log(`Listening at localhost:${port}`);
+app.listen(PORT, () => {
+    console.log(`Listening at localhost:${PORT}`);
 });

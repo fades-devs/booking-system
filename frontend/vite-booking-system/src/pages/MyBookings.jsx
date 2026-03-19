@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import LoginButton from "../components/LoginButton";
 
+const BOOKING_API_URL = import.meta.env.VITE_BOOKING_API_URL
+
 
 const MyBookings = () => {
 
@@ -19,7 +21,7 @@ const MyBookings = () => {
 
             try {
                 const token = await getAccessTokenSilently();
-                const response = await axios.get(`http://localhost:3002/api/v1/bookings/by-client`,
+                const response = await axios.get(`${BOOKING_API_URL}/api/v1/bookings/by-client`,
                     {
                         headers: {Authorization: `Bearer ${token}`}
                     }
