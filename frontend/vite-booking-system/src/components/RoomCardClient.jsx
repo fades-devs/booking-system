@@ -3,6 +3,8 @@ import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useState } from "react";
 
+const BOOKING_API_URL = import.meta.env.VITE_BOOKING_API_URL
+
 const RoomCardClient = ({room}) => {
 
    const {getAccessTokenSilently} = useAuth0();
@@ -11,7 +13,7 @@ const RoomCardClient = ({room}) => {
             try {
                 const token = await getAccessTokenSilently();
                 const response = await axios.post(
-                    `http://localhost:3002/api/v1/booking`,
+                    `${BOOKING_API_URL}/api/v1/booking`,
                     {roomId: room._id},
                     {
                         headers: {Authorization: `Bearer ${token}`}
@@ -26,7 +28,7 @@ const RoomCardClient = ({room}) => {
         }
     }
 
-    const imgUrl = room.pictures && room.pictures.length > 0 ? room.pictures[0] : 'https://via.placeholder.com/400x300?text=No+Image+Available';
+    const imgUrl = room.pictures && room.pictures.length > 0 ? room.pictures[0] : 'https://placehold.co/600x400?text=No%20Available%20Image';
 
     return (
         <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden flex flex-col hover:shadow-lg transition-all">

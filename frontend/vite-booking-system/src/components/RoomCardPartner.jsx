@@ -3,6 +3,8 @@ import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useState } from "react";
 
+const ROOM_API_URL = import.meta.env.VITE_ROOM_API_URL
+
 const RoomCardPartner = ({room, onCancel}) => {
 
     const [isEditing, setIsEditing] = useState(false)
@@ -18,7 +20,7 @@ const RoomCardPartner = ({room, onCancel}) => {
         try {
             const token = await getAccessTokenSilently();
             const response = axios.put(
-                `http://localhost:3001/api/v1/rooms/${room._id}`,
+                `${ROOM_API_URL}/api/v1/rooms/${room._id}`,
                 {
                     title: title,
                     capacity: capacity,
@@ -40,7 +42,7 @@ const RoomCardPartner = ({room, onCancel}) => {
         try {
             const token = await getAccessTokenSilently();
             const response = axios.delete(
-                `http://localhost:3001/api/v1/rooms/${room._id}`,
+                `${ROOM_API_URL}/api/v1/rooms/${room._id}`,
                 {
                     headers: {Authorization: `Bearer ${token}`}
                 }
@@ -54,7 +56,7 @@ const RoomCardPartner = ({room, onCancel}) => {
         }
     }
 
-    const imgUrl = room.pictures && room.pictures.length > 0 ? room.pictures[0] : 'https://via.placeholder.com/400x300?text=No+Image+Available';
+    const imgUrl = room.pictures && room.pictures.length > 0 ? room.pictures[0] : 'https://placehold.co/600x400?text=No%20Available%20Image';
 
     if (isEditing) {
         return (
