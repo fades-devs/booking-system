@@ -16,7 +16,10 @@ const Room = require('./Room');
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true
+}));
 
 // const s3 = new S3Client({
 //     credentials: {
