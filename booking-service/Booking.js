@@ -1,25 +1,28 @@
 const mongoose = require("mongoose");
-const {Schema} = mongoose;
+const { Schema } = mongoose;
 
-const bookingSchema = new Schema({
+const bookingSchema = new Schema(
+  {
     finalPrice: Number,
     basePrice: Number,
-    weatherFee: Number, 
+    weatherFee: Number,
     status: {
-        type: String,
-        enum: ['Pending', 'Completed', 'Cancelled'],
-        default: 'Pending'
+      type: String,
+      enum: ["Pending", "Completed", "Cancelled"],
+      default: "Pending",
     },
     clientId: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     roomId: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     roomName: String,
-    stripeSessionId: String
-}, {timestamps: true});
+    stripeSessionId: String,
+  },
+  { timestamps: true },
+);
 
-module.exports = mongoose.model('Booking', bookingSchema);
+module.exports = mongoose.model("Booking", bookingSchema);

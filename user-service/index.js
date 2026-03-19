@@ -1,9 +1,9 @@
-const express = require('express');
-const dotenv = require('dotenv');
-const mongoose = require('mongoose');
-const { auth } = require('express-oauth2-jwt-bearer');
-const User = require('./User');
-const helmet = require('helmet');
+const express = require("express");
+const dotenv = require("dotenv");
+const mongoose = require("mongoose");
+const { auth } = require("express-oauth2-jwt-bearer");
+const User = require("./User");
+const helmet = require("helmet");
 
 const app = express();
 // load environment variables
@@ -12,63 +12,61 @@ dotenv.config();
 app.use(express.json());
 app.use(helmet());
 
-const PORT = process.env.PORT || 3000; 
-const MONGO_URI = process.env.MONGO_URI
+const PORT = process.env.PORT || 3000;
+const MONGO_URI = process.env.MONGO_URI;
 
 // connect to database
-mongoose.connect(MONGO_URI)
-.then(() => console.log('MongoDB Database connected successfully'))
-.catch((err) => {
-    console.error('Database connection error', err);
+mongoose
+  .connect(MONGO_URI)
+  .then(() => console.log("MongoDB Database connected successfully"))
+  .catch((err) => {
+    console.error("Database connection error", err);
     process.exit(1); // stop app if db fails
-});
+  });
 
 // user authentication
 const checkJwt = auth({
   audience: process.env.AUTH0_AUDIENCE,
   issuerBaseURL: process.env.AUTH0_ISSUER_BASE_URL,
-  tokenSigningAlg: 'RS256'
+  tokenSigningAlg: "RS256",
 });
 
 // route to sync user (register or login)
-app.post('/api/v1/auth/sync', checkJwt, async (req, res) => {
-    try {
+app.post("/api/v1/auth/sync", checkJwt, async (req, res) => {
+  try {
+    // get the auth0 id from the request token (will be passed by frontend)
+    const auth0Id = req.auth.payload.sub;
 
-        // get the auth0 id from the request token (will be passed by frontend)
-        const auth0Id = req.auth.payload.sub;
-
-        // MORE OPTIMISED - RETURN EARLY -> APPLY THIS LOGIC TO ALL API
-        // if existing user, update (later)
-        const userExist = await User.findOne({auth0Id});
-        if (userExist) {
-            return res.status(200).json(userExist);
-        }
-
-        // if new user, add to db
-        // get user info from request body (will be passed by frontend)
-        const {name, email} = req.body;
-        const userData = new User({
-            auth0Id,
-            email,
-            name
-        });
-        await userData.save();
-        res.status(201).json(userData);
-        }
-
-    catch (error) {
-        console.error("Error in user sync:", error);
-        res.status(500).json({ error: 'Internal Server Error'});
+    // MORE OPTIMISED - RETURN EARLY -> APPLY THIS LOGIC TO ALL API
+    // if existing user, update (later)
+    const userExist = await User.findOne({ auth0Id });
+    if (userExist) {
+      return res.status(200).json(userExist);
     }
+
+    // if new user, add to db
+    // get user info from request body (will be passed by frontend)
+    const { name, email } = req.body;
+    const userData = new User({
+      auth0Id,
+      email,
+      name,
+    });
+    await userData.save();
+    res.status(201).json(userData);
+  } catch (error) {
+    console.error("Error in user sync:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 // route to get specific user (for other services)
-app.get('/api/v1/user/:authid', async(req, res) => {
-    const user = await User.findOne({auth0Id: req.params.authid});
-    res.status(200).json(user);
+app.get("/api/v1/user/:authid", async (req, res) => {
+  const user = await User.findOne({ auth0Id: req.params.authid });
+  res.status(200).json(user);
 });
 
 // start server
 app.listen(PORT, () => {
-    console.log(`Listening at localhost:${PORT}`);
+  console.log(`Listening at localhost:${PORT}`);
 });
