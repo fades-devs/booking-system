@@ -1,23 +1,18 @@
 import axios from "axios";
-
 import { useAuth0 } from "@auth0/auth0-react";
 import { useState } from "react";
-
 import toast from "react-hot-toast";
-import { Toaster } from "react-hot-toast";
 
 const ROOM_API_URL = import.meta.env.VITE_ROOM_API_URL
 
 const RoomCardPartner = ({room, onCancel}) => {
 
     const [isEditing, setIsEditing] = useState(false)
-
     const [title, setTitle] = useState(room.title)
     const [capacity, setCapacity] = useState(room.capacity)
     const [basePrice, setBasePrice] = useState(room.basePrice)
     const [location, setLocation] = useState(room.location)
-
-   const {getAccessTokenSilently} = useAuth0();
+    const {getAccessTokenSilently} = useAuth0();
 
     const handleUpdate = async (e) => {
 

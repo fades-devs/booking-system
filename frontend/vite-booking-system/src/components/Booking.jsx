@@ -1,15 +1,13 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import axios from "axios";
 import { useState } from "react";
-
-import toast, {Toaster} from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 const BOOKING_API_URL = import.meta.env.VITE_BOOKING_API_URL
 
 const Booking = ({booking, onCancel}) => {
 
     const {getAccessTokenSilently} = useAuth0();
-
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
 
@@ -37,8 +35,6 @@ const Booking = ({booking, onCancel}) => {
     return (
         <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-5 sm:p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-5 hover:shadow-md transition-shadow mb-4">
             {/* Booking information */}
-
-
             <div className="flex flex-col gap-2 w-full">
                 <div className="flex items-center gap-3">
                     <h2 className="text-xl font-bold text-slate-800">{booking.roomName}</h2>

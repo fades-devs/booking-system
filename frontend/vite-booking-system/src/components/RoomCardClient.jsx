@@ -1,10 +1,6 @@
 import axios from "axios";
-
 import { useAuth0 } from "@auth0/auth0-react";
-import { useState } from "react";
-
 import toast from "react-hot-toast";
-import { Toaster } from "react-hot-toast";
 
 const BOOKING_API_URL = import.meta.env.VITE_BOOKING_API_URL
 

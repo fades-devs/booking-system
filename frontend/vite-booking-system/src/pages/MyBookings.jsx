@@ -1,12 +1,10 @@
 import { useAuth0 } from "@auth0/auth0-react"
-
 import Booking from '../components/Booking'
 import { useEffect, useState } from "react";
 import axios from "axios";
 import LoginButton from "../components/LoginButton";
 
 const BOOKING_API_URL = import.meta.env.VITE_BOOKING_API_URL
-
 
 const MyBookings = () => {
 

@@ -1,7 +1,5 @@
-
 import { useAuth0 } from "@auth0/auth0-react";
 import LoginButton from '../components/LoginButton';
-import LogoutButton from '../components/LogoutButton';
 import RoomCardClient from "../components/RoomCardClient";
 import axios from "axios";
 import { useState, useEffect } from "react";
@@ -11,16 +9,10 @@ const ROOM_API_URL = import.meta.env.VITE_ROOM_API_URL;
 const Home = () => {
 
     const {user, isAuthenticated} = useAuth0();
-
     const [searchQuery, setSearchQuery] = useState('');
     const [rooms, setRooms] = useState([]);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
-
-    // const rooms = [
-    //     {id: 1, title: 'Test 1', capacity: 10, basePrice: 100, location: 'Dundee'},
-    //     {id: 2, title: 'Test 2', capacity: 20, basePrice: 200, location: 'York'},
-    // ]
 
     useEffect(() => {
         const getRooms = async () => {

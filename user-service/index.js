@@ -5,19 +5,15 @@ const { auth } = require('express-oauth2-jwt-bearer');
 const User = require('./User');
 const helmet = require('helmet');
 
-
 const app = express();
+// load environment variables
+dotenv.config();
 
 app.use(express.json());
 app.use(helmet());
 
-
-// load environment variables
-dotenv.config();
 const PORT = process.env.PORT || 3000; 
-
 const MONGO_URI = process.env.MONGO_URI
-
 
 // connect to database
 mongoose.connect(MONGO_URI)
@@ -27,36 +23,11 @@ mongoose.connect(MONGO_URI)
     process.exit(1); // stop app if db fails
 });
 
-
 // user authentication
 const checkJwt = auth({
   audience: process.env.AUTH0_AUDIENCE,
   issuerBaseURL: process.env.AUTH0_ISSUER_BASE_URL,
   tokenSigningAlg: 'RS256'
-});
-
-// enforce on all endpoints
-// app.use(jwtCheck);
-
-// add health check ?
-
-// Public route - no authentication required
-app.get('/api/public', (req, res) => {
-  res.json({
-    message: 'Hello from a public endpoint! No authentication required.',
-  });
-});
-
-// Protected route - requires valid JWT
-app.get('/api/private', checkJwt, (req, res) => {
-  res.json({
-    message: 'Hello from a private endpoint!',
-    user: req.auth.payload.sub,
-  });
-});
-
-app.get('/authorized', function (req, res) {
-    res.send('Secured Resource');
 });
 
 // route to sync user (register or login)
@@ -95,11 +66,6 @@ app.post('/api/v1/auth/sync', checkJwt, async (req, res) => {
 app.get('/api/v1/user/:authid', async(req, res) => {
     const user = await User.findOne({auth0Id: req.params.authid});
     res.status(200).json(user);
-});
-
-// routes
-app.get('/', (req, res) => {
-    res.send('Hello World!');
 });
 
 // start server

@@ -1,14 +1,7 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
-
 import {Route, Routes} from 'react-router-dom';
 import {useIdleTimer} from 'react-idle-timer';
-
-import toast from 'react-hot-toast';
-import { Toaster } from 'react-hot-toast';
-
+import toast, {Toaster} from 'react-hot-toast';
 import Home from './pages/Home';
 import MyBookings from './pages/MyBookings';
 import Navbar from './components/Navbar';

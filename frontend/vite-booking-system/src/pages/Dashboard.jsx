@@ -2,9 +2,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import RoomCardPartner from "../components/RoomCardPartner";
 import { useState, useEffect } from "react";
 import axios from "axios";
-
 import CreateListing from "../components/CreateListing";
-
 import LoginButton from "../components/LoginButton";
 
 const ROOM_API_URL = import.meta.env.VITE_ROOM_API_URL
@@ -12,7 +10,6 @@ const ROOM_API_URL = import.meta.env.VITE_ROOM_API_URL
 const Dashboard = () => {
 
     const { isAuthenticated, getAccessTokenSilently } = useAuth0();
-
     const [rooms, setRooms] = useState([]);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);

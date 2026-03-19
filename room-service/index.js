@@ -4,48 +4,23 @@ const mongoose = require('mongoose');
 const axios = require('axios');
 const cors = require('cors');
 const helmet = require('helmet');
-
 const { auth } = require('express-oauth2-jwt-bearer');
-
-
 const Room = require('./Room');
 
-
-// Doing this means a monolithic application / no separation / coupling!
-// const User = require('../user-service/User');
-
-
 const app = express();
+// load environment variables
+dotenv.config();
+const upload = require('./upload');
 
 app.use(cors({
     origin: process.env.FRONTEND_URL,
     credentials: true
 }));
-
-// const s3 = new S3Client({
-//     credentials: {
-//         accessKeyId: process.env.AWS_ACCESS_KEY,
-//         secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
-//     },
-//     region: 'eu-west-1'
-// });
-
 app.use(express.json());
 app.use(helmet());
 
-// load environment variables
-dotenv.config();
-const upload = require('./upload');
-
 const PORT = process.env.PORT || 3001; 
-
 const MONGO_URI = process.env.MONGO_URI
-
-// const bucketName = process.env.AWS_BUCKET_NAME
-// const region = process.env.AWS_BUCKET_REGION
-// const accessKeyId = process.env.AWS_ACCESS_KEY
-// const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY
-
 
 // connect to database
 mongoose.connect(MONGO_URI)
@@ -62,44 +37,12 @@ const checkJwt = auth({
   tokenSigningAlg: 'RS256'
 });
 
-// routes
-app.get('/api/fetch', (req, res) => {
-    try {
-        res.json('Yes it works!')
-    } catch (error) {
-        res.status(500).json({ error: 'Internal Server Error'})
-    }
-});
-
-// route to test file upload
-app.post('/api/upload', upload.array('files', 3), async (req, res) => {
-    try {
-        res.status(201).json({files: req.files})
-
-    } catch(error) {
-        res.status(500).json(error);
-    }
-});
-
 // route to create new room
 app.post('/api/v1/room', checkJwt, upload.array('files', 3), async (req, res) => {
     try {
 
         // get ID of authenticated user
         const partnerId = req.auth.payload.sub;
-
-        // // call user API to get user
-        // const userData = await axios.get(`http://localhost:3000/api/v1/user/${partnerId}`);
-        // const user = userData.data
-
-        // if (!user) {
-        //     res.status(404).json({message: "User not found."});
-        // }
-
-        // // Check if user is partner
-        // if (user.role != 'partner') {
-        //     return res.status(400).json({message: "Unauthorized User."})
-        // }
 
         // extract s3 urls from uploaded files
         const pictureUrls = req.files ? req.files.map(file => file.location) : [];
@@ -129,19 +72,6 @@ app.post('/api/v1/room', checkJwt, upload.array('files', 3), async (req, res) =>
         res.status(500).json({ error: 'Internal Server Error'})
     }
 });
-
-// // route to get all rooms
-// app.get('/api/v1/rooms', async (req, res) => {
-
-//     try {
-//         const rooms = await Room.find();
-//         res.status(200).json(rooms);
-
-//     } catch (error) {
-//         console.error("Error fetching rooms:", error);
-//         res.status(500).json({ error: 'Internal Server Error'});
-//     }
-// });
 
 // route to get all rooms (search/filter logic)
 app.get('/api/v1/rooms', async (req, res) => {
@@ -179,19 +109,6 @@ app.get('/api/v1/rooms', async (req, res) => {
 
         // Perform final query
         const rooms = await Room.find(query)
-
-        // // if (!search) {
-        // //     const rooms = await Room.find();
-        // //     return res.status(200).json(rooms);
-        // // }
-
-        // // const rooms = await Room.find({title: search});
-        // const rooms = await Room.find({
-        //     $text: {$search: search},
-        //     location: location
-        // });
-        // const rooms = await Room.find({$text: {$search: search}}, {location: location},
-        //     {capacity: {$gte: capMin, $lte: capMax}}, {basePrice: {$gte: priceMin, $lte: priceMax}});
         
         res.status(200).json(rooms);
 
@@ -205,20 +122,6 @@ app.get('/api/v1/rooms', async (req, res) => {
 app.get('/api/v1/rooms/by-partner', checkJwt, async (req, res) => {
     try {
         const partnerId = req.auth.payload.sub;
-
-        // // call user API to get user
-        // const userData = await axios.get(`http://localhost:3000/api/v1/user/${partnerId}`);
-        // const user = userData.data
-
-        // if (!user) {
-        //     res.status(404).json({message: "User not found."});
-        // }
-
-        // // Check if user is partner
-        // if (user.role != 'partner') {
-        //     return res.status(400).json({message: "Unauthorized User."})
-        // }
-
 
         const rooms = await Room.find({partnerId});
         res.status(200).json(rooms);
@@ -246,25 +149,11 @@ app.get('/api/v1/rooms/:id', async(req, res) => {
     }
 });
 
-
 // route to update specific room (for partner)
 app.put('/api/v1/rooms/:id', checkJwt, async (req, res) => {
     try {
         
         const partnerId = req.auth.payload.sub;
-
-        // // call user API to get user
-        // const userData = await axios.get(`http://localhost:3000/api/v1/user/${partnerId}`);
-        // const user = userData.data
-
-        // if (!user) {
-        //     res.status(404).json({message: "User not found."});
-        // }
-
-        // // Check if user is partner
-        // if (user.role != 'partner') {
-        //     return res.status(400).json({message: "Unauthorized User."})
-        // }
 
         const id = req.params.id;
         const roomExist = await Room.findOne({_id: id, partnerId});
@@ -287,19 +176,6 @@ app.delete('/api/v1/rooms/:id', checkJwt, async (req, res) => {
     try {
 
         const partnerId = req.auth.payload.sub;
-
-        // // call user API to get user
-        // const userData = await axios.get(`http://localhost:3000/api/v1/user/${partnerId}`);
-        // const user = userData.data
-
-        // if (!user) {
-        //     res.status(404).json({message: "User not found."});
-        // }
-
-        // // Check if user is partner
-        // if (user.role != 'partner') {
-        //     return res.status(400).json({message: "Unauthorized User."})
-        // }
         
         const id = req.params.id;
         const roomExist = await Room.findOne({_id: id, partnerId});
@@ -316,7 +192,6 @@ app.delete('/api/v1/rooms/:id', checkJwt, async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error'});
     }
 });
-
 
 // start server
 app.listen(PORT, () => {

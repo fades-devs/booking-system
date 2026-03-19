@@ -5,27 +5,25 @@ const { auth } = require('express-oauth2-jwt-bearer');
 const axios = require('axios');
 const cors = require('cors');
 const helmet = require('helmet');
-
 const Booking = require('./Booking');
 
 const app = express();
-
 // load environment variables
 dotenv.config();
 
 const PORT = process.env.PORT || 3002;
-
 const MONGO_URI = process.env.MONGO_URI
-
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const FRONTEND_URL = process.env.FRONTEND_URL
+const ROOM_API_URL = process.env.ROOM_API_URL
+const WEATHER_API_URL = process.env.WEATHER_API_URL
 
 app.use(express.json());
 app.use(helmet());
-
 app.use(cors({
     origin: process.env.FRONTEND_URL,
     credentials: true
 }));
-
 
 // connect to database
 mongoose.connect(MONGO_URI)
@@ -42,40 +40,6 @@ const checkJwt = auth({
   tokenSigningAlg: 'RS256'
 });
 
-// routes
-app.get('/', (req, res) => {
-    res.send('Hello World!')
-});
-
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-const DOMAIN = process.env.BOOKING_API_URL
-const FRONTEND_URL = process.env.FRONTEND_URL
-const ROOM_API_URL = process.env.ROOM_API_URL
-const WEATHER_API_URL = process.env.WEATHER_API_URL
-
-// const YOUR_DOMAIN = 'http://localhost:3002';
-// const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173/booking-system/tree/main/frontend/vite-booking-system';
-// endpoint that creates a checkout session
-// app.post('/create-checkout-session', async (req, res) => {
-
-//   const session = await stripe.checkout.sessions.create({
-//     // add try catch block after
-//     line_items: [
-//       {
-//         // Provide the exact Price ID (for example, price_1234) of the product you want to sell
-//         // price: '{{PRICE_ID}}', 
-//         price: 'price_1T2XbuEAhxJTB6pG2Tfnh96F', // for testing
-//         quantity: 1,
-//       },
-//     ],
-//     mode: 'payment',
-//     success_url: `${DOMAIN}?success=true`,
-//   });
-
-// //   res.redirect(303, session.url);
-//   res.status(200).json({ url: session.url }); // for testing
-// });
-
 // route to create new booking
 // make room ID parameter not body
 app.post('/api/v1/booking', checkJwt, async (req, res) => {
@@ -87,14 +51,6 @@ app.post('/api/v1/booking', checkJwt, async (req, res) => {
 
         // get user auth ID and role
         const userId = req.auth.payload.sub;
-
-        // // call user API to get user
-        // const userData = await axios.get(`http://localhost:3000/api/v1/user/${userId}`);
-        // const user = userData.data
-        // // Check if user is client
-        // if (user.role != 'client') {
-        //     return res.status(400).json({message: "Unauthorized User."})
-        // }
         
         // get room details
         const roomData = await axios.get(`${ROOM_API_URL}/api/v1/rooms/${roomId}`);
@@ -172,8 +128,6 @@ app.post('/api/v1/booking', checkJwt, async (req, res) => {
         console.error("Error making the booking:", error);
         res.status(500).json({ error: 'Internal Server Error'});
     }
-
-    //
 });
 
 // route to cancel booking
@@ -181,19 +135,6 @@ app.delete('/api/v1/bookings/:id', checkJwt, async (req, res) => {
     try {
 
         const clientId = req.auth.payload.sub;
-        
-        // // call user API to get user
-        // const userData = await axios.get(`http://localhost:3000/api/v1/user/${clientId}`);
-        // const user = userData.data
-        
-        // if (!user) {
-        //     res.status(404).json({message: "User not found."});
-        // }
-        
-        // // Check if user is client
-        // if (user.role != 'client') {
-        //     return res.status(400).json({message: "Unauthorized User."})
-        // }
 
         const id = req.params.id;
 
@@ -227,19 +168,6 @@ app.get('/api/v1/bookings/by-client', checkJwt, async (req, res) => {
     try {
         const clientId = req.auth.payload.sub;
 
-        // // call user API to get user
-        // const userData = await axios.get(`http://localhost:3000/api/v1/user/${clientId}`);
-        // const user = userData.data
-        
-        // if (!user) {
-        //     res.status(404).json({message: "User not found."});
-        // }
-        
-        // // Check if user is client
-        // if (user.role != 'client') {
-        //     return res.status(400).json({message: "Unauthorized User."})
-        // }
-
         const bookingData = await Booking.find({clientId});
         res.status(200).json(bookingData);
 
@@ -248,7 +176,6 @@ app.get('/api/v1/bookings/by-client', checkJwt, async (req, res) => {
         res.status(500).json({error: 'Internal Server Error'});
     }
 });
-
 
 // start server
 app.listen(PORT, () => {
