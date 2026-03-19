@@ -17,11 +17,12 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const FRONTEND_URL = process.env.FRONTEND_URL
 const ROOM_API_URL = process.env.ROOM_API_URL
 const WEATHER_API_URL = process.env.WEATHER_API_URL
+const ORIGIN = process.env.ORIGIN
 
 app.use(express.json());
 app.use(helmet());
 app.use(cors({
-    origin: process.env.FRONTEND_URL,
+    origin: ORIGIN,
     credentials: true
 }));
 

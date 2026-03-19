@@ -12,15 +12,16 @@ const app = express();
 dotenv.config();
 const upload = require('./upload');
 
+const PORT = process.env.PORT || 3001; 
+const MONGO_URI = process.env.MONGO_URI
+const ORIGIN = process.env.ORIGIN
+
 app.use(cors({
-    origin: process.env.FRONTEND_URL,
+    origin: ORIGIN,
     credentials: true
 }));
 app.use(express.json());
 app.use(helmet());
-
-const PORT = process.env.PORT || 3001; 
-const MONGO_URI = process.env.MONGO_URI
 
 // connect to database
 mongoose.connect(MONGO_URI)
