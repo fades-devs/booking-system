@@ -109,7 +109,7 @@ app.post("/api/v1/booking", checkJwt, async (req, res) => {
     const bookingData = new Booking({
       finalPrice,
       basePrice,
-      weatherCharge,
+      weatherCharge: charge,
       clientId: userId,
       roomId,
       roomName: room.title,
