@@ -32,7 +32,7 @@ jobs:
       # --- ROOM SERVICE ---
       # This step ONLY runs if the room-service folder changed
       - name: Build & Deploy Room Service
-        if: contains(github.event.commits[0].modified, 'room-service/') || contains(github.event.commits[0].added, 'room-service/')
+        if: contains(toJson(github.event.commits), 'room-service/')
         run: |
           # 1. Enter the directory
           cd ./room-service
@@ -52,7 +52,7 @@ jobs:
       # --- USER SERVICE ---
       # This step ONLY runs if the user-service folder changed
       - name: Build & Deploy User Service
-        if: contains(github.event.commits[0].modified, 'user-service/') || contains(github.event.commits[0].added, 'user-service/')
+        if: contains(toJson(github.event.commits), 'user-service/')
         run: |
           # 1. Enter the directory
           cd ./user-service
@@ -72,7 +72,7 @@ jobs:
       # --- BOOKING SERVICE ---
       # This step ONLY runs if the booking-service folder changed
       - name: Build & Deploy Booking Service
-        if: contains(github.event.commits[0].modified, 'booking-service/') || contains(github.event.commits[0].added, 'booking-service/')
+        if: contains(toJson(github.event.commits), 'booking-service/')
         run: |
           # 1. Enter the directory
           cd ./booking-service
