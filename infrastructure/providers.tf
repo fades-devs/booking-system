@@ -7,6 +7,12 @@ terraform {
   }
 
   required_version = ">= 1.2"
+
+  backend "s3" {
+    bucket = "fadesdevs-terraform-state"
+    key    = "state/terraform.tfstate"
+    region = "us-east-1"
+  }
 }
 
 provider "aws" {
