@@ -206,3 +206,5 @@ app.delete("/api/v1/rooms/:id", checkJwt, async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Listening at localhost:${PORT}`);
 });
+
+// Triggering the CI/CD pipeline to watch the deployment
