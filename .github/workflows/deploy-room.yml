@@ -1,0 +1,37 @@
+name: "Deploy Room Service"
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'room-service/**' # trigger
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Build & Deploy
+        run: |
+          cd ./room-service
+          npm ci
+          npm test
+          cd ..
+          docker build --platform linux/amd64 -t fadesdevs/room-service:latest ./room-service
+          docker push fadesdevs/room-service:latest
+          aws ecs update-service --cluster booking-app-cluster --service room-service --force-new-deployment
