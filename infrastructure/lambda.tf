@@ -29,7 +29,7 @@ resource "aws_lambda_function" "weather_api" {
 
   environment {
     variables = {
-      WEATHER_API_URL = var.weather_api_url
+      WEATHER_API_KEY = var.weather_api_url
     }
   }
   
@@ -43,9 +43,19 @@ resource "aws_lambda_function_url" "weather_url" {
   authorization_type = "NONE" # Allows your Booking service to ping it without AWS signing
 }
 
+# 1. Permission to hit the Function URL
 resource "aws_lambda_permission" "allow_public_url" {
-  statement_id           = "FunctionURLAllowPublicAccess"
+  statement_id           = "FunctionURLAllowPublicAccessFromTerraform"
   action                 = "lambda:InvokeFunctionUrl"
+  function_name          = aws_lambda_function.weather_api.function_name
+  principal              = "*"
+  function_url_auth_type = "NONE"
+}
+
+# 2. Permission for the URL to trigger the actual Lambda code
+resource "aws_lambda_permission" "allow_public_invoke" {
+  statement_id           = "FunctionURLAllowInvokeActionFromTerraform"
+  action                 = "lambda:InvokeFunction"
   function_name          = aws_lambda_function.weather_api.function_name
   principal              = "*"
   function_url_auth_type = "NONE"
