@@ -19,6 +19,7 @@
     "express": "^5.2.1",
     "express-oauth2-jwt-bearer": "^1.7.4",
     "helmet": "^8.1.0",
+    "jest": "^30.3.0",
     "mongoose": "^9.1.6",
     "nodemon": "^3.1.11",
     "stripe": "^20.3.1"
