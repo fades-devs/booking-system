@@ -26,7 +26,6 @@ jobs:
           npm ci
           # Zip the CONTENTS of the folder, not the folder itself
           zip -r ../weather-service.zip ./* - name: Deploy to AWS Lambda
-        run: |
           # Lambda function name in AWS
           aws lambda update-function-code \
             --function-name weather_service \
