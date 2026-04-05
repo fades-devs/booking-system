@@ -42,3 +42,11 @@ resource "aws_lambda_function_url" "weather_url" {
   function_name      = aws_lambda_function.weather_api.function_name
   authorization_type = "NONE" # Allows your Booking service to ping it without AWS signing
 }
+
+resource "aws_lambda_permission" "allow_public_url" {
+  statement_id           = "FunctionURLAllowPublicAccess"
+  action                 = "lambda:InvokeFunctionUrl"
+  function_name          = aws_lambda_function.weather_api.function_name
+  principal              = "*"
+  function_url_auth_type = "NONE"
+}
