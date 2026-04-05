@@ -81,6 +81,17 @@ resource "aws_apigatewayv2_route" "user_proxy" {
   target    = "integrations/${aws_apigatewayv2_integration.user_integration.id}"
 }
 
+resource "aws_apigatewayv2_route" "auth_base" {
+  api_id    = aws_apigatewayv2_api.api.id
+  route_key = "ANY /api/v1/auth"
+  target    = "integrations/${aws_apigatewayv2_integration.user_integration.id}"
+}
+resource "aws_apigatewayv2_route" "auth_proxy" {
+  api_id    = aws_apigatewayv2_api.api.id
+  route_key = "ANY /api/v1/auth/{proxy+}"
+  target    = "integrations/${aws_apigatewayv2_integration.user_integration.id}"
+}
+
 # Booking Routes
 resource "aws_apigatewayv2_route" "booking_base" {
   api_id    = aws_apigatewayv2_api.api.id
