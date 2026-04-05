@@ -26,7 +26,6 @@ jobs:
           npm ci
           # Zip the CONTENTS of the folder, not the folder itself
           zip -r ../weather-service.zip ./* - name: Deploy to AWS Lambda
-        run: |
           # Stepping back out of the folder to where the zip lives
           cd .. 
           # Notice the dash in weather-service!
