@@ -5,12 +5,15 @@ import toast from "react-hot-toast";
 
 const BOOKING_API_URL = import.meta.env.VITE_BOOKING_API_URL;
 
-const Booking = ({ booking, onCancel }) => {
+const Booking = ({ booking, onCancel, isPast }) => {
   const { getAccessTokenSilently } = useAuth0();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const handleCancel = async () => {
+
+    if (isPast) return; // security check
+    setLoading(true);
     try {
       const token = await getAccessTokenSilently();
       const response = await axios.delete(
@@ -55,10 +58,14 @@ const Booking = ({ booking, onCancel }) => {
       </div>
       {/* Action button */}
       <button
-        onClick={handleCancel}
-        className="w-full sm:w-auto whitespace-nowrap px-5 py-2 border-2 border-rose-100 bg-rose-50 text-rose-600 rounded-md font-medium hover:bg-rose-100 hover:border-rose-200 transition-all cursor-pointer"
+        onClick={handleCancel} disabled={isPast || loading}
+        className={`w-full sm:w-auto whitespace-nowrap px-5 py-2 border-2 rounded-md font-medium transition-all ${
+          isPast
+            ? "bg-slate-50 text-slate-400 border-slate-200 cursor-not-allowed"
+            : "border-rose-100 bg-rose-50 text-rose-600 hover:bg-rose-100 hover:border-rose-200 cursor-pointer"
+        }`}
       >
-        Cancel Booking
+        {isPast ? "Unavailable" : loading ? "Cancelling..." : "Cancel Booking"}
       </button>
     </div>
   );

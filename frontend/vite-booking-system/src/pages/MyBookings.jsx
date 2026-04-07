@@ -54,6 +54,19 @@ const MyBookings = () => {
     );
   }
 
+  // --- Filtering Logic ---
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // Reset time to midnight for accurate day comparison
+  const currentBookings = bookings.filter((b) => {
+    const bDate = new Date(b.createdAt);
+    return bDate >= today && b.status !== "Cancelled";
+  });
+
+  const previousBookings = bookings.filter((b) => {
+    const bDate = new Date(b.createdAt);
+    return bDate < today || b.status === "Cancelled";
+  });
+
   return (
     <div className="w-full max-w-4xl mx-auto p-5 sm:p-10">
       {/* Page header */}
@@ -64,22 +77,47 @@ const MyBookings = () => {
         </p>
       </div>
       {/* List container */}
-      <div className="flex flex-col gap-4">
-        {bookings.length > 0 ? (
-          bookings.map((booking) => (
-            <Booking
-              booking={booking}
-              key={booking._id}
-              onCancel={removeBookingScreen}
-            />
-          ))
-        ) : (
-          <div className="flex flex-col items-center justify-center py-16 bg-slate-50 rounded-xl border-2 border-slate-200 border-dashed">
-            <p className="text-lg text-slate-500 font-medium mb-2">
-              You don't have any active bookings.
-            </p>
+      <div className="flex flex-col gap-10">
+        {/* Current Bookings */}
+        <section>
+          <h2 className="text-xl font-semibold text-slate-800 mb-4">Current Bookings</h2>
+          <div className="flex flex-col gap-4">
+            {currentBookings.length > 0 ? (
+              currentBookings.map((booking) => (
+                <Booking
+                  booking={booking}
+                  key={booking._id}
+                  onCancel={removeBookingScreen}
+                  isPast={false}
+                />
+              ))
+            ) : (
+              <div className="py-8 bg-slate-50 rounded-xl border-2 border-slate-200 border-dashed text-center">
+                <p className="text-slate-500 font-medium">You don't have any active bookings.</p>
+              </div>
+            )}
           </div>
-        )}
+        </section>
+        {/* Previous Bookings */}
+        <section>
+          <h2 className="text-xl font-semibold text-slate-800 mb-4">Previous & Cancelled Bookings</h2>
+          <div className="flex flex-col gap-4">
+            {previousBookings.length > 0 ? (
+              previousBookings.map((booking) => (
+                <Booking
+                  booking={booking}
+                  key={booking._id}
+                  onCancel={removeBookingScreen}
+                  isPast={true} 
+                />
+              ))
+            ) : (
+              <div className="py-8 bg-slate-50 rounded-xl border-2 border-slate-200 border-dashed text-center">
+                <p className="text-slate-500 font-medium">No previous bookings found.</p>
+              </div>
+            )}
+          </div>
+        </section>
       </div>
     </div>
   );
