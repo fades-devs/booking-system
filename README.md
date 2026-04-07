@@ -4,7 +4,8 @@ A scalable, cloud-native conference room booking platform built with a microserv
 
 **[View Live Project](https://room-booking-system-ivory.vercel.app/)**
 
-> **Note:** screenshot of homepage
+> Website's Homepage
+<img width="2560" height="1600" alt="room-booking-system-ivory vercel app_(Nest Hub Max)" src="https://github.com/user-attachments/assets/03c54536-498b-4b9c-9780-c51002e3b681" />
 
 ## Motivation
 This project began as a standard university assignment but quickly evolved beyond local development into scalability, cloud infrastructure and DevOps. Building this allowed me to bridge the gap between writing code and deploying reliable, distributed systems in the cloud.
@@ -33,7 +34,8 @@ Managing conference room bookings effectively requires handling multiple user ro
 
 ## System Architecture
 
-> **Note:** architecture diagram
+> System Architecture Diagram
+<img width="1052" height="764" alt="DevOps CW" src="https://github.com/user-attachments/assets/4e991357-2e85-4c7c-973f-4602155d2bbf" />
 
 ## What I Learned
 Transitioning this project to the cloud taught me invaluable lessons about distributed systems:
@@ -46,6 +48,7 @@ Transitioning this project to the cloud taught me invaluable lessons about distr
 ## Future Roadmap
 Here are the next steps planned for this application:
 * Implement further client-side and server-side user input validation.
+* Frontend Decoupling: Separate the user interfaces (a Client Portal and a Partner Portal). This will enhance security, improve the user experience and improve page load performance.
 * Add advanced search filters (e.g., strict availability dates).
 * Separate infrastructure into distinct `Development` and `Production` environments via Terraform workspaces.
 * Enhance Stripe webhook integration to automatically process `completed` and `cancelled` payment events asynchronously.
