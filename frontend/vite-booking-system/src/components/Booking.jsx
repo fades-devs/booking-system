@@ -7,7 +7,7 @@ const BOOKING_API_URL = import.meta.env.VITE_BOOKING_API_URL;
 
 const Booking = ({ booking, onCancel, isPast }) => {
   const { getAccessTokenSilently } = useAuth0();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const handleCancel = async () => {
