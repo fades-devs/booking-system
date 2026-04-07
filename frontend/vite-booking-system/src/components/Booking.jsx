@@ -65,7 +65,7 @@ const Booking = ({ booking, onCancel, isPast }) => {
             : "border-rose-100 bg-rose-50 text-rose-600 hover:bg-rose-100 hover:border-rose-200 cursor-pointer"
         }`}
       >
-        {isPast ? "Unavailable" : loading ? "Cancelling..." : "Cancel Booking"}
+        {isPast ? "Unavailable" : "Cancel Booking"}
       </button>
     </div>
   );
