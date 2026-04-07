@@ -39,20 +39,20 @@ const Home = () => {
         
         {/* Modern UI Badge */}
         <div className="inline-block px-4 py-1.5 rounded-full bg-slate-100 text-slate-600 font-semibold text-sm mb-6 border border-slate-200">
-          Enterprise Booking Platform
+          Conference Room Booking Platform
         </div>
         
         {/* High-Impact Headline with Gradient Text */}
         <h1 className="text-5xl md:text-6xl font-extrabold text-slate-900 tracking-tight mb-6">
           Book Conference Rooms <br className="hidden sm:block" />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
-            With Zero Friction
+            Seamlessly
           </span>
         </h1>
         
         {/* Value Proposition Copy */}
         <p className="text-lg text-slate-500 max-w-2xl mb-10 leading-relaxed">
-          Experience the next generation of workspace management. Powered by a scalable microservices architecture and real-time dynamic pricing.
+          Simple and easy workspace management. Powered by a scalable microservices architecture and real-time dynamic pricing.
         </p>
         
         {/* Call to Action Container */}
