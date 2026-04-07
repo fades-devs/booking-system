@@ -5,7 +5,7 @@ A scalable, cloud-native conference room booking platform built with a microserv
 **[View Live Project](https://room-booking-system-ivory.vercel.app/)**
 
 > Website's Homepage
-<img width="2560" height="1600" alt="room-booking-system-ivory vercel app_(Nest Hub Max)" src="https://github.com/user-attachments/assets/03c54536-498b-4b9c-9780-c51002e3b681" />
+<img width="800" alt="room-booking-system-ivory vercel app_(Nest Hub Max)" src="https://github.com/user-attachments/assets/03c54536-498b-4b9c-9780-c51002e3b681" />
 
 ## Motivation
 This project began as a standard university assignment but quickly evolved beyond local development into scalability, cloud infrastructure and DevOps. Building this allowed me to bridge the gap between writing code and deploying reliable, distributed systems in the cloud.
@@ -35,7 +35,7 @@ Managing conference room bookings effectively requires handling multiple user ro
 ## System Architecture
 
 > System Architecture Diagram
-<img width="825" height="527" alt="DevOps CW" src="https://github.com/user-attachments/assets/85751595-1e14-49a0-ae44-c61683112812" />
+<img width="800" alt="DevOps CW" src="https://github.com/user-attachments/assets/85751595-1e14-49a0-ae44-c61683112812" />
 
 ## What I Learned
 Transitioning this project to the cloud taught me invaluable lessons about distributed systems:
