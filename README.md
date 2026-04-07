@@ -15,6 +15,8 @@ Managing conference room bookings effectively requires handling multiple user ro
 
 ## Key Features & Architecture Highlights
 * **Microservices Architecture:** Independently deployable services (User, Room, Booking, Weather) ensuring loose coupling and separation of concerns.
+* **Conference Room Management:** Partners can create, update, and delete conference room listings, including uploading images.
+* **End-to-end Booking:** Clients can search for conference rooms, book them using Stripe for payment, and manage or cancel their reservations on their bookings page.
 * **Infrastructure as Code (IaC):** Entire AWS infrastructure provisioned and managed using Terraform.
 * **Serverless Computing:** Weather-based dynamic pricing powered by AWS Lambda.
 * **Automated CI/CD:** GitHub Actions workflows for automated testing (with Jest), Docker image building, and zero-downtime deployments to AWS ECS Fargate.
