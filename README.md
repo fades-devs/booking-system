@@ -35,7 +35,7 @@ Managing conference room bookings effectively requires handling multiple user ro
 ## System Architecture
 
 > System Architecture Diagram
-<img width="1052" height="764" alt="DevOps CW" src="https://github.com/user-attachments/assets/4e991357-2e85-4c7c-973f-4602155d2bbf" />
+<img width="825" height="527" alt="DevOps CW" src="https://github.com/user-attachments/assets/85751595-1e14-49a0-ae44-c61683112812" />
 
 ## What I Learned
 Transitioning this project to the cloud taught me invaluable lessons about distributed systems:
