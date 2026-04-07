@@ -7,7 +7,7 @@ A scalable, cloud-native conference room booking platform built with a microserv
 > Website's Homepage
 <img width="800" alt="room-booking-system-ivory vercel app_(Nest Hub Max)" src="https://github.com/user-attachments/assets/03c54536-498b-4b9c-9780-c51002e3b681" />
 
-## Motivation
+## Context
 This project began as a standard university assignment but quickly evolved beyond local development into scalability, cloud infrastructure and DevOps. Building this allowed me to bridge the gap between writing code and deploying reliable, distributed systems in the cloud.
 
 ## What Problem It Solves
