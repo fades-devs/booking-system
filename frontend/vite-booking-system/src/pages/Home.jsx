@@ -32,16 +32,35 @@ const Home = () => {
     e.preventDefault();
   };
 
+// --- THE UNAUTHENTICATED LANDING PAGE (HERO SECTION) ---
   if (!isAuthenticated) {
     return (
-      <div className="flex flex-col items-center justify-center bg-slate-200 py-24 px-5 rounded-2xl my-10">
-        <h1 className="text-5xl text-center font-bold mb-4">
-          Welcome to ConfBook
+      <div className="flex flex-col items-center justify-center min-h-[70vh] px-5 text-center">
+        
+        {/* Modern UI Badge */}
+        <div className="inline-block px-4 py-1.5 rounded-full bg-slate-100 text-slate-600 font-semibold text-sm mb-6 border border-slate-200">
+          Enterprise Booking Platform
+        </div>
+        
+        {/* High-Impact Headline with Gradient Text */}
+        <h1 className="text-5xl md:text-6xl font-extrabold text-slate-900 tracking-tight mb-6">
+          Book Conference Rooms <br className="hidden sm:block" />
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
+            With Zero Friction
+          </span>
         </h1>
-        <h5 className="text-lg text-center text-slate-600 mb-8">
-          Conference Room Booking Website
-        </h5>
-        <LoginButton />
+        
+        {/* Value Proposition Copy */}
+        <p className="text-lg text-slate-500 max-w-2xl mb-10 leading-relaxed">
+          Experience the next generation of workspace management. Powered by a scalable microservices architecture and real-time dynamic pricing.
+        </p>
+        
+        {/* Call to Action Container */}
+        <div className="flex flex-col sm:flex-row items-center gap-4 shadow-xl shadow-blue-900/5 rounded-lg p-2 bg-white border border-slate-100">
+           <LoginButton />
+           <span className="text-sm text-slate-400 px-4 hidden sm:block">Secure access via Auth0</span>
+        </div>
+        
       </div>
     );
   }
