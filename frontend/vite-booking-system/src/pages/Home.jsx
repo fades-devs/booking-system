@@ -20,7 +20,7 @@ const Home = () => {
         const response = await axios.get(`${ROOM_API_URL}/api/v1/rooms`);
         setRooms(response.data);
       } catch (err) {
-        if (err.message === "Network Error" || err.response?.status === 503) {
+        if (err.message === "Network Error" || err.response?.status >= 500) {
           setBackendAsleep(true);
         }
         else {
