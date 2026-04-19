@@ -29,7 +29,7 @@ const UserSync = () => {
           console.log("User successfully synced to MongoDB!");
           
         } catch (error) {
-            if (err.message === "Network Error" || err.response?.status >= 500) {
+            if (error.message === "Network Error" || error.response?.status >= 500) {
             console.log("Backend asleep: Skipping user sync.");
             return;
           }
